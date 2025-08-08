@@ -1,0 +1,336 @@
+/* Mobile Performance Optimizations for ICEPACA */
+
+/* Base mobile optimizations */
+.mobile-device {
+  /* Reduce paint complexity */
+  --animation-duration: 0.2s;
+  --transition-duration: 0.15s;
+  
+  /* Optimize rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+.mobile-device * {
+  /* Force GPU acceleration for smoother animations */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Touch device optimizations */
+.touch-device {
+  /* Disable hover effects to prevent sticky hover states */
+  --hover-opacity: 1;
+  --hover-scale: 1;
+  --hover-transform: none;
+}
+
+.touch-device .hover-effect:hover {
+  transform: var(--hover-transform) !important;
+  opacity: var(--hover-opacity) !important;
+  scale: var(--hover-scale) !important;
+}
+
+/* Improve touch targets */
+.touch-device button,
+.touch-device a,
+.touch-device input,
+.touch-device [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 16px;
+}
+
+/* Disable text selection on touch devices for better UX */
+.touch-device .no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Connection-aware optimizations */
+.connection-slow {
+  /* Disable non-essential animations */
+  --enable-particles: 0;
+  --enable-parallax: 0;
+  --enable-blur-effects: 0;
+  --image-quality: 60;
+}
+
+.connection-slow .bento-item,
+.connection-slow .product-card {
+  animation: none !important;
+  transition: none !important;
+}
+
+.connection-slow .ice-melt-transition,
+.connection-slow .alpaca-wink {
+  display: none !important;
+}
+
+/* Reduced motion preferences */
+.reduce-motion,
+.reduce-motion * {
+  animation-duration: 0.01s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01s !important;
+  scroll-behavior: auto !important;
+}
+
+.reduce-motion .parallax-effect {
+  transform: none !important;
+}
+
+/* Low memory device optimizations */
+.low-memory-device {
+  --enable-3d: 0;
+  --enable-shadows: 0;
+  --enable-gradients: 0;
+  --blur-radius: 0;
+}
+
+.low-memory-device .product-viewer-3d {
+  display: none !important;
+}
+
+.low-memory-device .shadow-lg,
+.low-memory-device .shadow-xl {
+  box-shadow: none !important;
+}
+
+.low-memory-device .bg-gradient-to-br,
+.low-memory-device .bg-gradient-to-r {
+  background: var(--fallback-bg) !important;
+}
+
+/* Tablet-specific optimizations */
+.tablet-device {
+  /* Optimize for touch and hover hybrid interaction */
+  --touch-feedback-scale: 0.98;
+}
+
+.tablet-device .bento-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+/* Orientation-specific optimizations */
+.orientation-landscape.mobile-device {
+  /* Optimize navigation for landscape mobile */
+  --header-height: 48px;
+  --sidebar-width: 240px;
+}
+
+.orientation-portrait.mobile-device {
+  /* Optimize for portrait mobile */
+  --header-height: 56px;
+  --sidebar-width: 280px;
+}
+
+/* Safe area optimizations for iOS */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .mobile-device .header {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .mobile-device .footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  
+  .mobile-device .sidebar {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Input optimizations */
+.mobile-device input,
+.mobile-device textarea {
+  /* Prevent zoom on iOS */
+  font-size: 16px !important;
+  
+  /* Improve typing experience */
+  -webkit-appearance: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  
+  /* Better touch target */
+  min-height: 48px;
+}
+
+.mobile-device input:focus,
+.mobile-device textarea:focus {
+  /* Prevent zoom and improve focus state */
+  transform: none;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Loading states optimized for mobile */
+.mobile-device .loading-skeleton {
+  /* Use simpler loading animations */
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite ease-in-out;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Scroll optimizations */
+.mobile-device .scrollable {
+  /* Smooth scrolling on mobile */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+}
+
+.mobile-device .scroll-snap-item {
+  scroll-snap-align: start;
+}
+
+/* Image optimizations */
+.mobile-device img {
+  /* Optimize image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  /* Lazy loading support */
+  loading: lazy;
+  
+  /* Prevent layout shift */
+  height: auto;
+  max-width: 100%;
+}
+
+.mobile-device .lazy-loading {
+  /* Placeholder while loading */
+  background-color: #f5f5f5;
+  background-image: linear-gradient(90deg, #f5f5f5 25%, #e5e5e5 50%, #f5f5f5 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.mobile-device .lazy-loaded {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Grid optimizations for mobile */
+@media (max-width: 767px) {
+  .bento-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+  
+  /* Reduce padding on mobile */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  /* Stack elements vertically */
+  .flex-row-mobile-col {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  /* Hide non-essential elements */
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  /* Show mobile-only elements */
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.75rem !important;
+  }
+}
+
+/* Performance critical CSS - inline this in HTML head */
+.critical-above-fold {
+  /* Ensure above-the-fold content renders immediately */
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Performance monitoring indicator */
+.performance-indicator {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  
+  /* Optimized rendering */
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+/* Emergency performance mode */
+.emergency-performance-mode * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.emergency-performance-mode img {
+  image-rendering: pixelated;
+}
+
+.emergency-performance-mode .complex-component {
+  display: none !important;
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .mobile-device {
+    /* Reduce white backgrounds that drain battery */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .mobile-optimization-wrapper {
+    /* Hide mobile-specific elements in print */
+    .performance-indicator,
+    .mobile-nav,
+    .floating-buttons {
+      display: none !important;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Install development tools
+RUN npm install -g nodemon ts-node
+
+# Copy source code
+COPY . .
+
+# Expose ports (app + debug)
+EXPOSE 5000 9229
+
+# Development command with hot reload and debugging
+CMD ["npm", "run", "dev"]
